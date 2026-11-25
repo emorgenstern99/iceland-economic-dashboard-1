@@ -1,0 +1,88 @@
+{
+  "verified_at_utc": "2026-11-25T09:02:19+00:00",
+  "verified_at_local": "2026-11-25 03:02:19 Central Standard Time",
+  "all_checks_passed": true,
+  "checks": [
+    {
+      "indicator": "Real GDP Growth",
+      "source": "Statistics Iceland THJ01601",
+      "observation_checked": "2026Q2",
+      "dashboard_value": -1.1,
+      "source_raw_value": -1.1,
+      "transformation_check": "Chain volume 878,507 / 888,366 -> -1.1% YoY; QoQ SA=-3.0%",
+      "match": true
+    },
+    {
+      "indicator": "CPI Inflation (YoY % & Index)",
+      "source": "Statistics Iceland VIS01000 (+ CBI ID=2 mirror)",
+      "observation_checked": "2026M10",
+      "dashboard_value": {
+        "index": 700.4,
+        "yoy_pct": 5.9
+      },
+      "source_raw_value": {
+        "index": 700.4,
+        "published_yoy_pct": 5.9,
+        "cbi_mirror_yoy": 5.9
+      },
+      "transformation_check": "(700.4 / 661.4 - 1) * 100 = 5.9% (published 5.9%)",
+      "match": true
+    },
+    {
+      "indicator": "CBI Policy Rate (7-Day Term Deposit)",
+      "source": "Central Bank of Iceland TimeSeriesID=75 (and ID=17923)",
+      "observation_checked": "2026-11-25",
+      "dashboard_value": 8.0,
+      "source_raw_value": 8.0,
+      "transformation_check": "ID=75 (8.0%) matches Key Policy Rate ID=17923 (8.0% on 2026-11-25)",
+      "match": true
+    },
+    {
+      "indicator": "Exchange Rate (ISK per 1 USD & 1 EUR)",
+      "source": "Central Bank of Iceland TimeSeriesID=4055 (USD) & 4064 (EUR)",
+      "observation_checked": "2026-11-24",
+      "dashboard_value": {
+        "isk_per_usd": 125.15,
+        "isk_per_eur": 137.2
+      },
+      "source_raw_value": {
+        "isk_per_usd": 125.15,
+        "isk_per_eur": 137.2
+      },
+      "transformation_check": "Direct quotation mid-rate (ISK per 1 unit FX); no scaling applied to spot series",
+      "match": true
+    },
+    {
+      "indicator": "Merchandise Trade Balance",
+      "source": "Statistics Iceland UTA06001",
+      "observation_checked": "2026M10",
+      "dashboard_value": {
+        "exports_fob": 94782.6,
+        "imports_cif": 165077.1,
+        "balance": -70294.5
+      },
+      "source_raw_value": {
+        "exports_fob": 94782.6,
+        "imports_cif": 165077.1,
+        "balance": -70294.5
+      },
+      "transformation_check": "FOB (94,782.6) - CIF (165,077.1) = -70,294.5M ISK (published -70,294.5)",
+      "match": true
+    },
+    {
+      "indicator": "Unemployment Rate (LFS)",
+      "source": "Statistics Iceland VIN00002 (SA) & VIN00001 (Orig)",
+      "observation_checked": "2026M09",
+      "dashboard_value": {
+        "sa": 5.7,
+        "orig": 5.1
+      },
+      "source_raw_value": {
+        "sa": 5.7,
+        "orig": 5.1
+      },
+      "transformation_check": "Exact match to Statistics Iceland Labor Force Survey (16-74 total)",
+      "match": true
+    }
+  ]
+}
