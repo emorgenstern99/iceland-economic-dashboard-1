@@ -1,8 +1,8 @@
 {
   "country": "Iceland",
   "research_question": "Is Iceland achieving a soft landing — bringing CPI inflation down toward the Central Bank's 2.5% target while preserving growth, employment, and króna stability?",
-  "refreshed_at_utc": "2026-11-25T09:11:42+00:00",
-  "refreshed_at_local": "2026-11-25T03:11:42-06:00",
+  "refreshed_at_utc": "2026-11-27T07:19:57+00:00",
+  "refreshed_at_local": "2026-11-27T01:19:57-06:00",
   "series": {
     "gdp": {
       "id": "gdp",
@@ -397,10 +397,10 @@
       "frequency": "Monthly",
       "units": "% YoY and Index (May 1988 = 100; also shown rebased 2015M01 = 100)",
       "transformation": "12-month inflation computed as (CPI_t / CPI_{t-12} - 1) * 100 and cross-checked against Statistics Iceland published annual change; rebased index = (CPI_t / CPI_2015M01) * 100. CBI inflation target = 2.5%.",
-      "latest_observation_date": "2026M10",
-      "latest_observation_iso": "2026-10-01",
-      "latest_value": 5.9,
-      "latest_index": 700.4,
+      "latest_observation_date": "2026M11",
+      "latest_observation_iso": "2026-11-01",
+      "latest_value": 5.83,
+      "latest_index": 696.6,
       "records": [
         {
           "period": "2015M01",
@@ -1679,6 +1679,15 @@
           "yoy_pct": 5.9,
           "yoy_published_pct": 5.9,
           "mom_pct": 0.44
+        },
+        {
+          "period": "2026M11",
+          "date": "2026-11-01",
+          "cpi_index": 696.6,
+          "cpi_rebased_2015": 166.13,
+          "yoy_pct": 5.83,
+          "yoy_published_pct": 5.8,
+          "mom_pct": -0.54
         }
       ]
     },
@@ -1691,8 +1700,8 @@
       "frequency": "Policy meeting / Daily effective step series",
       "units": "% per annum",
       "transformation": "Unadjusted nominal policy rate (7-day term deposit rate, CBI's key stance rate since May 2014). Step-line reflects effective dates.",
-      "latest_observation_date": "2026-11-25",
-      "latest_observation_iso": "2026-11-25",
+      "latest_observation_date": "2026-11-26",
+      "latest_observation_iso": "2026-11-26",
       "latest_value": 8.0,
       "records": [
         {
@@ -16584,6 +16593,11 @@
           "date": "2026-11-25",
           "rate_pct": 8.0,
           "is_decision_change": false
+        },
+        {
+          "date": "2026-11-26",
+          "rate_pct": 8.0,
+          "is_decision_change": false
         }
       ]
     },
@@ -16596,10 +16610,10 @@
       "frequency": "Daily (business days)",
       "units": "ISK per 1 USD (and ISK per 1 EUR)",
       "transformation": "Direct quotation (price notation: ISK per 1 unit of foreign currency). Rising ISK/USD indicates Icelandic króna depreciation; falling ISK/USD indicates króna appreciation. Includes 30-business-day moving average.",
-      "latest_observation_date": "2026-11-24",
-      "latest_observation_iso": "2026-11-24",
-      "latest_value": 125.15,
-      "latest_eur_value": 137.2,
+      "latest_observation_date": "2026-11-26",
+      "latest_observation_iso": "2026-11-26",
+      "latest_value": 124.83,
+      "latest_eur_value": 137.0,
       "records": [
         {
           "date": "2015-01-02",
@@ -37383,6 +37397,20 @@
           "isk_per_eur": 137.2,
           "usd_ma30": 122.6547,
           "eur_ma30": 136.5733
+        },
+        {
+          "date": "2026-11-25",
+          "isk_per_usd": 125.47,
+          "isk_per_eur": 137.2,
+          "usd_ma30": 122.7757,
+          "eur_ma30": 136.6
+        },
+        {
+          "date": "2026-11-26",
+          "isk_per_usd": 124.83,
+          "isk_per_eur": 137.0,
+          "usd_ma30": 122.88,
+          "eur_ma30": 136.62
         }
       ]
     },

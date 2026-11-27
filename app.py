@@ -66,12 +66,56 @@ st.markdown(
     .meta-caption {
         background-color: #f8fafc;
         border-left: 3px solid #1d3557;
-        padding: 0.55rem 0.8rem;
+        padding: 0.6rem 0.85rem;
         border-radius: 4px;
         font-size: 0.82rem;
         color: #334155;
         margin-top: 0.25rem;
         line-height: 1.45;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    .meta-details {
+        width: 100%;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+    .latest-value-row {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+    }
+    .latest-value-box {
+        max-width: 100%;
+        box-sizing: border-box;
+        text-align: right;
+        background-color: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 0.35rem 0.65rem;
+    }
+    .latest-value-label {
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #64748b;
+        display: block;
+    }
+    .latest-value-num {
+        font-size: 1.0rem;
+        font-weight: 700;
+        color: #0b2545;
+        display: block;
+        line-height: 1.25;
+    }
+    .latest-value-date {
+        font-size: 0.72rem;
+        color: #475569;
+        display: block;
     }
     .meta-caption code, .refresh-banner code {
         background-color: #e2e8f0;
@@ -146,16 +190,29 @@ def _filter_df(df: pd.DataFrame, start_iso: str) -> pd.DataFrame:
     return df[df["date"] >= start_iso].copy()
 
 
-def _chart_metadata_html(series_meta: dict[str, Any], extra_note: str = "") -> str:
+def _chart_metadata_html(
+    series_meta: dict[str, Any],
+    latest_value_str: str,
+    extra_note: str = "",
+) -> str:
     extra = f"<br><b>Note:</b> {extra_note}" if extra_note else ""
     return (
         f"<div class='meta-caption'>"
+        f"<div class='meta-details'>"
         f"<b>Units:</b> {series_meta['units']} &nbsp;|&nbsp; "
         f"<b>Frequency:</b> {series_meta['frequency']} &nbsp;|&nbsp; "
         f"<b>Latest Observation:</b> <code>{series_meta['latest_observation_date']}</code><br>"
         f"<b>Source:</b> <a href='{series_meta['source_url']}' target='_blank'>{series_meta['source']}</a><br>"
         f"<b>Transformation:</b> {series_meta['transformation']}"
         f"{extra}"
+        f"</div>"
+        f"<div class='latest-value-row'>"
+        f"<div class='latest-value-box'>"
+        f"<span class='latest-value-label'>Latest Value</span>"
+        f"<span class='latest-value-num'>{latest_value_str}</span>"
+        f"<span class='latest-value-date'>{series_meta['latest_observation_date']}</span>"
+        f"</div>"
+        f"</div>"
         f"</div>"
     )
 
@@ -360,7 +417,10 @@ def render_dashboard() -> None:
             _apply_base_layout(fig_gdp)
             fig_gdp.update_yaxes(title_text="Percent (%)")
             st.plotly_chart(fig_gdp, use_container_width=True, theme=None)
-            st.markdown(_chart_metadata_html(series["gdp"]), unsafe_allow_html=True)
+            gdp_latest_str = f"{gdp_df.iloc[-1]['yoy_pct']:+.1f}% YoY"
+            if gdp_show_qoq:
+                gdp_latest_str += f"<br><span style='font-size:0.82rem;font-weight:600;color:#334155;'>{gdp_df.iloc[-1]['qoq_sa_pct']:+.1f}% QoQ SA</span>"
+            st.markdown(_chart_metadata_html(series["gdp"], gdp_latest_str), unsafe_allow_html=True)
 
         with col2:
             st.subheader("2. Consumer Price Index (CPI) & Inflation")
@@ -414,7 +474,12 @@ def render_dashboard() -> None:
                 fig_cpi.update_yaxes(title_text="May 1988 = 100", secondary_y=False)
                 fig_cpi.update_yaxes(title_text="2015M01 = 100", secondary_y=True)
             st.plotly_chart(fig_cpi, use_container_width=True, theme=None)
-            st.markdown(_chart_metadata_html(series["cpi"]), unsafe_allow_html=True)
+            cpi_latest_str = (
+                f"{cpi_df.iloc[-1]['yoy_pct']:.2f}% YoY"
+                if cpi_view.startswith("YoY")
+                else f"{cpi_df.iloc[-1]['cpi_index']:.1f} idx"
+            )
+            st.markdown(_chart_metadata_html(series["cpi"], cpi_latest_str), unsafe_allow_html=True)
 
         st.markdown("")
 
@@ -460,6 +525,7 @@ def render_dashboard() -> None:
             st.markdown(
                 _chart_metadata_html(
                     series["policy_rate"],
+                    f"{rate_df.iloc[-1]['rate_pct']:.2f}%",
                     extra_note=f"Current ex-post real policy rate (Policy Rate {rate_df.iloc[-1]['rate_pct']:.2f}% − CPI YoY {cpi_df.iloc[-1]['yoy_pct']:.2f}%) = {real_ex_post:+.2f}%.",
                 ),
                 unsafe_allow_html=True,
@@ -519,7 +585,13 @@ def render_dashboard() -> None:
             _apply_base_layout(fig_fx, height=320)
             fig_fx.update_yaxes(title_text="ISK per 1 unit FX (↑ = ISK depreciation)")
             st.plotly_chart(fig_fx, use_container_width=True, theme=None)
-            st.markdown(_chart_metadata_html(series["exchange_rate"]), unsafe_allow_html=True)
+            if fx_currency == "ISK per 1 USD":
+                fx_latest_str = f"{fx_df.iloc[-1]['isk_per_usd']:.2f} ISK/USD"
+            elif fx_currency == "ISK per 1 EUR":
+                fx_latest_str = f"{fx_df.iloc[-1]['isk_per_eur']:.2f} ISK/EUR"
+            else:
+                fx_latest_str = f"{fx_df.iloc[-1]['isk_per_usd']:.2f} USD / {fx_df.iloc[-1]['isk_per_eur']:.2f} EUR"
+            st.markdown(_chart_metadata_html(series["exchange_rate"], fx_latest_str), unsafe_allow_html=True)
 
         st.markdown("")
 
@@ -578,7 +650,8 @@ def render_dashboard() -> None:
             fig_trade.update_yaxes(title_text="Monthly Flow (ISK Millions)", secondary_y=False)
             fig_trade.update_yaxes(title_text="12M Cumul. (ISK M)", secondary_y=True, showgrid=False)
             st.plotly_chart(fig_trade, use_container_width=True, theme=None)
-            st.markdown(_chart_metadata_html(series["trade_balance"]), unsafe_allow_html=True)
+            trade_latest_str = f"{trade_df.iloc[-1]['balance_isk_m']:,.1f}M ISK"
+            st.markdown(_chart_metadata_html(series["trade_balance"], trade_latest_str), unsafe_allow_html=True)
 
         with col6:
             st.subheader("6. Unemployment Rate (Labor Force Survey)")
@@ -611,7 +684,8 @@ def render_dashboard() -> None:
             _apply_base_layout(fig_unemp)
             fig_unemp.update_yaxes(title_text="% of Labor Force (Ages 16–74)")
             st.plotly_chart(fig_unemp, use_container_width=True, theme=None)
-            st.markdown(_chart_metadata_html(series["unemployment"]), unsafe_allow_html=True)
+            unemp_latest_str = f"{unemp_df.iloc[-1]['unemp_sa_pct']:.1f}% SA"
+            st.markdown(_chart_metadata_html(series["unemployment"], unemp_latest_str), unsafe_allow_html=True)
 
         st.markdown("---")
 
