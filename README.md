@@ -1,3 +1,8 @@
+# Streamlit URL
+https://iceland-economic-dashboard-1-ns4e9htfxbbkeqrvx2wdtj.streamlit.app/
+[Streamlit](https://iceland-economic-dashboard-1-ns4e9htfxbbkeqrvx2wdtj.streamlit.app/)
+[https://iceland-economic-dashboard-1-ns4e9htfxbbkeqrvx2wdtj.streamlit.app/](https://iceland-economic-dashboard-1-ns4e9htfxbbkeqrvx2wdtj.streamlit.app/)
+
 # 🇮🇸 Iceland Macroeconomic Monitor
 
 An automated, primary-source macroeconomic monitoring dashboard for **Iceland** built with **Python**, **Streamlit**, and **Plotly**, designed to run locally or deploy on **GitHub + Streamlit Community Cloud** with scheduled data refreshes.
